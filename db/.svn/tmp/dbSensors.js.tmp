@@ -1,0 +1,10 @@
+var mysql = require('mysql');
+var properties = require('../Resources/properties.js');
+
+var client = mysql.createClient({
+  host: properties.DB_HOST,
+  port: properties.DB_PORT,
+  database: properties.DB_SERVERNAME,
+  user: properties.DB_USERNAME,
+  password: properties.DB_PW,
+});
