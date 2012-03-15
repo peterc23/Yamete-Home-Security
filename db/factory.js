@@ -16,4 +16,17 @@ function createSensorItem(id, armState, settingId, automationId, contactId, devi
     return sensorItem;
 }
 
+function createUserItem(id, username, password, householdId){
+  
+  var userItem = {};
+  
+  userItem.id = id;
+  userItem.username = username;
+  userItem.password = password;
+  userItem.householdId = householdId;
+  
+  return userItem;
+}
+
 exports.createSensorItem = createSensorItem;
+exports.createUserItem = createUserItem;

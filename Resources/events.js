@@ -34,6 +34,6 @@
    exports.TEST_SYSTEM = 'TestSystem';
    exports.ADD_NOTIFICATION_DEVICE = 'AddNotificationDevice';
    exports.REPORT_EMERGENCY = 'ReportEmergency';
-   
+   exports.SEND_USRNAME_PWD = 'SendUserNamePassword';  
    
 })(typeof exports === 'undefined'? this['events']={}: exports);

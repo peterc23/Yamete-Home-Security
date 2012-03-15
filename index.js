@@ -6,8 +6,10 @@ var handler = require('./requestHandlers.js');
 
 var sensorfile = new(static.Server)('.');
 var httpServer = http.createServer(function (request, response) {
-    request.addListener('end', function () {
-        sensorfile.serve(request, response);
+    console.log("rahhh");
+	request.addListener('end', function () {
+	console.log("sigh");
+    	    sensorfile.serve(request, response);
     });
 }).listen(1234);
 
@@ -15,7 +17,7 @@ var io = socketio.listen(httpServer);
 io.sockets.on('connection', function (socket) {
   console.log("new Client connected");
 
-  socket.on(events.DEVICE_CONNECTED, function (data) {
+   socket.on(events.DEVICE_CONNECTED, function (data) {
   console.log('device connected');
   console.log(data);
     handler.retrieveSensorStatus(data, function(Sensors){
@@ -71,5 +73,18 @@ io.sockets.on('connection', function (socket) {
     console.log(data);
   console.log("jeff triggered the child position alarm");
   });
-  
+ 
+ //START OF GUI 
+  var clientGUI = {};
+  socket.on(events.SEND_USRNAME_PWD, function (data) {
+  console.log('login request');
+  console.log(data);
+  data.socketid = socket.id;
+  handler.loginRequest(data, function(response){
+	console.log(response);
+	  io.sockets.socket(data.socketid).emit(events.USER_CREDENTIALS, response);		      
+		      
+  });
+  });
+
 });

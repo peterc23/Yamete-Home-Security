@@ -18,7 +18,7 @@ function executeFindSingleQuery(statement, parameters, builder, callback)
         console.log(result);
         
         //client.end();
-        if (callback) callback(builder(result));
+        if (callback) callback(result);
     });
 }
 

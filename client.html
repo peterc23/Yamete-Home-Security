@@ -1,0 +1,95 @@
+<html>
+<head>
+<script type="text/javascript" src="../socket.io/socket.io.js"></script>
+<script type="text/javascript" src="../Resources/events.js"></script>
+<script type="text/javascript">
+  function armdisarm(status, elementId) {
+    if (status == 'arm'){
+      color = 'green';
+      set = false;
+    }else{
+      color = 'red';
+      set = true;
+    }
+    if(document.getElementById(elementId) == null) return;
+  document.getElementById(elementId).style.color = color;
+  document.getElementById(elementId).disabled = set;
+ }
+  function getStatus(){
+    socket.emit(events.DEVICE_CONNECTED, { houseId: '1' });
+  };
+var socket = io.connect('http://localhost:1234');
+
+
+  socket.on(events.DEVICE_STATUS, function (data) {
+    console.log(data);
+    console.log(JSON.stringify(data));
+    for (var i = 0; i < data.length; i++) {
+    console.log(i);
+    console.log(data[i].id);
+    
+      if(data[i].armState == '1'){
+          armdisarm('arm', data[i].id);
+        }else{
+          armdisarm('disarm', data[i].id);
+        }
+    }
+  });
+  
+
+  function emitSensorEvent(event, sensorId, message){
+    var date = new Date();
+    var messageData = message;
+    messageData[events.SENSOR_ID] = sensorId;
+    messageData[events.DATE_TIME] = date;
+    socket.emit(event, messageData);
+  }
+  
+  function triggerFireAlarm()
+  { 
+    emitSensorEvent(events.TRIGGER_FIRE_ALARM, '1', {});
+  }
+  function triggerFloodAlarm()
+  {
+    emitSensorEvent(events.TRIGGER_WATER_LEVEL, '2', {});
+  }
+  function triggerCabinetOpened()
+  {
+    emitSensorEvent(events.CABINET_OPENED, '3', {});
+  }
+  function triggerResidentFell()
+  {
+    emitSensorEvent(events.RESIDENT_FELL, '4', {});
+  }
+  function triggerLowBattery(sensorId)
+  {
+    emitSensorEvent(events.LOW_BATTERY, sensorId, {});
+  }
+  function triggerHomeSensor(sensorId)
+  {
+    emitSensorEvent(events.TRIGGER_SENSOR, sensorId, {});
+  }
+  function childPositionUpdate(sensorId, latitude, longitude)
+  {
+    var message = {};
+    message[events.LATITUDE] = latitude;
+    message[events.LONGITUDE] = longitude;
+    emitSensorEvent(events.UPDATE_CHILD_POSITION, sensorId, message);
+  }
+  function write(){
+    document.getElementById('placeholder').innerHTML = "The Martians are coming!";
+  }
+  
+
+</script>
+</head>
+<body>
+<body onLoad="javascript:getStatus()">
+Sensor Simulation Panel.    
+!!!!HOUSE 1!!!!!
+
+<ul>   
+<li><button id='1' type="button" onclick="triggerFireAlarm()">Trigger Fire Alarm (id = 1)</button></li>
+</ui>
+</body>
+</html>

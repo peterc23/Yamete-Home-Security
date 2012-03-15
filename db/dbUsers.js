@@ -4,9 +4,10 @@ var factory = require('./factory.js');
 
 function checkCredentials(data, callback){
      if (data == null || typeof data == 'undefined'){ callback(null); return}
-     client.executeFindMultipleQuery('SELECT * FROM '+properties.householdTable+' WHERE householdId = ?', [data.houseId], createSensorFromResult, function(houseInfo){
-     console.log(houseInfo);
-     callback(houseInfo);
+     client.executeFindSingleQuery('SELECT * FROM '+properties.usersTable+' WHERE username = ? LIMIT 1', [data.usrname], createUserFromResult, function(userInfo){
+     console.log("rahh");
+	     console.log(userInfo);
+     callback(userInfo);
      });
 }
 /*
@@ -17,11 +18,11 @@ function updateTriggerSensor(data, callback){
     );
 }*/
 
-function createSensorFromResult(result)
+function createUserFromResult(result)
 {
     if (result == null || typeof result == 'undefined') { callback(null); return; }
 
-    return factory.createSensorItem(result.id, result.armState, result.settingId, result.automationId, result.contactId, result.deviceTypeId, result.deviceType, result.Description, result.householdId);
+    return factory.createUserItem(result.id, result.username, result.password, result.householdId);
 }
 
 
