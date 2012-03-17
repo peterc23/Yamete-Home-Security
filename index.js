@@ -85,6 +85,6 @@ io.sockets.on('connection', function (socket) {
 	  io.sockets.socket(data.socketid).emit(events.USER_CREDENTIALS, response);		      
 		      
   });
-  });
+   });
 
 });

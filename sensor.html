@@ -21,7 +21,7 @@
 var socket = io.connect('http://localhost:1234');
 
 
-  socket.on(events.DEVICE_STATUS, function (data) {
+   socket.on(events.DEVICE_STATUS, function (data) {
     console.log(data);
     console.log(JSON.stringify(data));
     for (var i = 0; i < data.length; i++) {
@@ -35,7 +35,7 @@ var socket = io.connect('http://localhost:1234');
         }
     }
   });
-  
+ 
 
   function emitSensorEvent(event, sensorId, message){
     var date = new Date();
@@ -76,9 +76,7 @@ var socket = io.connect('http://localhost:1234');
     message[events.LONGITUDE] = longitude;
     emitSensorEvent(events.UPDATE_CHILD_POSITION, sensorId, message);
   }
-  function write(){
-    document.getElementById('placeholder').innerHTML = "The Martians are coming!";
-  }
+  
   
 
 </script>
