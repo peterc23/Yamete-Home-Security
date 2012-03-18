@@ -38,5 +38,6 @@
    exports.ADD_NOTIFICATION_DEVICE = 'AddNotificationDevice';
    exports.REPORT_EMERGENCY = 'ReportEmergency';
    exports.SEND_USRNAME_PWD = 'SendUserNamePassword';  
-   
+   exports.VIDEO_FEED = 'SendVideoFeed';
+   exports.CAM_FEED = "SendCamFeed";   
 })(typeof exports === 'undefined'? this['events']={}: exports);
