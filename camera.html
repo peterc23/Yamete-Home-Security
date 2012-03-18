@@ -25,7 +25,7 @@
         var backcontext = back.getContext('2d');
 
 
-		  var socket = io.connect('http://192.168.1.8:1234');
+		  var socket = io.connect(events.SERVER_URL);
 		  socket.on(events.DEVICE_STATUS, function(data){
 				  
 //				  document.write("grrr");

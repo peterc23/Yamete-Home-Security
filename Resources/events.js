@@ -1,4 +1,7 @@
 (function(exports){
+   
+   exports.SERVER_URL = 'http://192.168.1.8:1234';
+
    //****Functions for Sensors and Devices
    exports.SENSOR_ID = 'SensorId';
    exports.UPDATE_CHILD_POSITION = 'UpdateChildPosition';
