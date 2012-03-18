@@ -18,7 +18,7 @@
   function getStatus(){
     socket.emit(events.DEVICE_CONNECTED, { houseId: '1' });
   };
-var socket = io.connect('http://localhost:1234');
+var socket = io.connect('http://192.168.1.8:1234');
 
 
    socket.on(events.DEVICE_STATUS, function (data) {

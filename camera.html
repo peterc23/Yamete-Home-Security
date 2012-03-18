@@ -1,0 +1,65 @@
+<html>
+<head>
+<h1>Simple web camera display demo</h1>
+<video autoplay id="sourcevid"></video>
+<canvas id="output"></canvas>
+<div id="log"></div>
+<script type="text/javascript" src="../socket.io/socket.io.js"></script>
+<script type="text/javascript" src="../Resources/events.js"></script>
+<script type="text/javascript">
+	var video = document.getElementsByTagName('video')[0], 
+	heading = document.getElementsByTagName('h1')[0];
+
+	if(navigator.getUserMedia) {
+	  navigator.getUserMedia('video', successCallback, errorCallback);
+	  function successCallback( stream ) {
+	    video.src = stream;
+	  }
+	  function errorCallback( error ) {
+	    heading.textContent = "An error occurred: [CODE " + error.code + "]";
+          }
+       } else {
+	   heading.textContent = "Native web camera streaming is not supported in this browser!";
+       }
+    var back = document.createElement('canvas');
+        var backcontext = back.getContext('2d');
+
+
+		  var socket = io.connect('http://192.168.1.8:1234');
+		  socket.on(events.DEVICE_STATUS, function(data){
+				  
+//				  document.write("grrr");
+				  socket.emit('video', {hey:"hi"});	      
+		  });
+
+function send(msg){
+//	  document.write("got here");
+          socket.emit('video', msg);
+        }    
+
+    cw = 120;//240;//video.clientWidth;
+        ch = 200;//400;//video.clientHeight;
+	    //log('width = ' + ch);
+	        back.width = cw;
+		    back.height = ch;
+		        draw(video, backcontext, cw, ch);
+
+			    function draw(v, bc, w, h) {
+					socket.emit('video', 'got here');
+				            // First, draw it into the backing canvas
+				            bc.drawImage(v, 0, 0, w, h);
+
+					            // Grab the pixel data from the backing canvas
+					            var stringData=back.toDataURL();
+
+						            // send it on the wire
+						            send(stringData);
+
+							            // Start over! 10 frames a second = 100milliseconds
+							            setTimeout(function(){ draw(v, bc, w, h); });
+								    }
+					
+							    </script>
+						    </head>
+						    <body> dklajfkldajd </body>
+					    </html>
