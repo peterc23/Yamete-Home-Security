@@ -74,7 +74,7 @@ io.sockets.on('connection', function (socket) {
   console.log("jeff triggered the child position alarm");
   });
   socket.on('video', function(data){
-	console.log("hi");  console.log(data);
+    console.log("hi");
   });
  
  //START OF GUI 
