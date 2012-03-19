@@ -16,9 +16,44 @@
         }
     </style>
     <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- JAVASCRIPTS -->
+    <script type="text/javascript" src="../socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="../Resources/events.js"></script>
+    <script type="text/javascript" src="../Resources/constants.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect(constants.URL);
+        var houseid = 1;
+        var systemArmState;
+        
+        function initialize()
+        {
+            
+        }
+        
+        function onFamilySafetyArmClicked()
+        {
+            socket.emit(events.ARM_SYSTEM, {houseid : houseid, systemid : constants.FAMILY_SAFETY_SYSTEM_ID});
+        }
+        
+        function onFamilySafetyDisarmClicked()
+        {
+            socket.emit(events.DISARM_SYSTEM, {houseid : houseid, systemid : constants.FAMILY_SAFETY_SYSTEM_ID});
+        }
+        
+        function onHomeSecurityArmClicked()
+        {
+            socket.emit(events.ARM_SYSTEM, {houseid : houseid, systemid : constants.HOME_SECURITY_SYSTEM_ID});
+        }
+        
+        function onHomeSecurityDisarmClicked()
+        {
+            socket.emit(events.DISARM_SYSTEM, {houseid : houseid, systemid : constants.HOME_SECURITY_SYSTEM_ID});
+        }
+    </script>
 </head>
 
-<body>
+<body onLoad="initialize()">
 
 <!-- navigation bar -->
 <div class="navbar navbar-fixed-top">
@@ -59,8 +94,8 @@
                     </div>
                     <div class="span3">
                         <p><h3>Family Safety System</h3><br/>
-                        <p><button class="btn btn-primary">Arm</button>&nbsp;
-                        <button class="btn btn-inverse">Disarm</button></p>
+                        <button class="btn btn-primary" onclick="onFamilySafetyArmClicked()">Arm</button>&nbsp;
+                        <button class="btn btn-inverse" onclick="onFamilySafetyDisarmClicked()">Disarm</button></p>
                     </div>
                 </div>
             </div>
@@ -75,8 +110,8 @@
                     </div>
                     <div class="span3">
                         <p><h3>Home Security System</h3><br/>
-                        <p><button class="btn btn-primary">Arm</button>&nbsp;
-                        <button class="btn btn-inverse">Disarm</button></p>
+                        <button class="btn btn-primary" onclick="onHomeSecurityArmClicked()">Arm</button>&nbsp;
+                        <button class="btn btn-inverse" onclick="onHomeSecurityDisarmClicked()">Disarm</button></p>
                     </div>
                 </div>
             </div>
@@ -89,8 +124,6 @@
         </div>
     </div>
 </div>
-
-<script src="login_controller.js"></script>
 
 </body>
 </html>
