@@ -6,6 +6,7 @@
 <div id="log"></div>
 <script type="text/javascript" src="../socket.io/socket.io.js"></script>
 <script type="text/javascript" src="../Resources/events.js"></script>
+<script type="text/javascript" src="../Resources/constants.js></script>
 <script type="text/javascript">
 	var video = document.getElementsByTagName('video')[0], 
 	heading = document.getElementsByTagName('h1')[0];
@@ -25,7 +26,7 @@
         var backcontext = back.getContext('2d');
 
 
-		  var socket = io.connect(events.SERVER_URL);
+		  var socket = io.connect(constants.URL);
 		  socket.on(events.DEVICE_STATUS, function(data){
 				  
 //				  document.write("grrr");

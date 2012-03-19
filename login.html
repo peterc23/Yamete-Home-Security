@@ -28,8 +28,9 @@
     <script type="text/javascript" src="../Resources/md5-min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="../Resources/events.js"></script>
+    <script type="text/javascript" src="../Resources/constants.js"></script>
     <script>
-	      var socket = io.connect(events.SERVER_URL);
+	      var socket = io.connect(constants.URL);
 	        socket.on(events.USER_CREDENTIALS , function (data) {
 		  console.log(data);
 		  var url = 'http://localhost:1234/mainmenu.html?username='+data.username+'&houseId='+data.householdId;
