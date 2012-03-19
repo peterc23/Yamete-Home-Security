@@ -25,6 +25,14 @@ function getHouseholdSensors(houseid, callback){
     });
 }
 
+function sensorTriggered(sensorid, callback){
+    if (sensorid == null || typeof sensorid == 'undefined') {callback(null); return; }
+    console.log('grr'+sensorid);
+    client.executeUpdateSingleQuery('UPDATE '+properties.householdTable+' SET triggered=? WHERE id=?',['1', sensorid], function(err){
+		console.log(err);
+ 	    callback(err);
+    });
+}
 /*
 function updateTriggerSensor(data, callback){
     if (data == null || typeof data == 'undefined'){ callback(null); return}
@@ -40,6 +48,18 @@ function createSensorFromResult(result)
     return factory.createSensorItem(result.id, result.armState, result.settingId, result.automationId, result.contactId, result.deviceTypeId, result.deviceType, result.Description, result.householdId);
 }
 
+function retrieveContactInfo(sensorid, callback){
+  if (sensorid == null || typeof sensorid == 'undefined') {callback(null); return; }
+
+  client.executeFindSingleQuery('SELECT * FROM '+properties.householdTable+' JOIN '+properties.notifyDevices+' ON '+properties.householdTable+'.contactId = '+properties.notifyDevices+'.id WHERE '+properties.householdTable+'.id=?', [sensorid], createSensorFromResult, function(contactInfo){
+    console.log("****************************************");
+    console.log(contactInfo);
+    callback(contactInfo);
+  });
+}
+
 exports.getHouseholdSensors = getHouseholdSensors;
 exports.checkState = checkState;
 exports.armSystem = armSystem;
+exports.retrieveContactInfo = retrieveContactInfo;
+exports.sensorTriggered = sensorTriggered;

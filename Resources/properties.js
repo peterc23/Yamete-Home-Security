@@ -5,4 +5,5 @@ exports.DB_USERNAME = "peterc23_ece355";
 exports.DB_PW = "jeffrey";
 
 exports.householdTable = "Household";
+exports.notifyDevices = 'NotificationDevices';
 exports.usersTable = "Users";

@@ -33,7 +33,7 @@
 	      var socket = io.connect(constants.URL);
 	        socket.on(events.USER_CREDENTIALS , function (data) {
 		  console.log(data);
-		  var url = 'http://localhost:1234/mainmenu.html?username='+data.username+'&houseId='+data.householdId;
+		  var url = 'http://'+constants.URL+'/mainmenu.html?username='+data.username+'&houseId='+data.householdId;
 	  	  location.href = url;	  
 		});
 		

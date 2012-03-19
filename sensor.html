@@ -4,7 +4,10 @@
 <script type="text/javascript" src="../Resources/events.js"></script>
 <script type="text/javascript" src="../Resources/constants.js"></script>
 <script type="text/javascript">
-  function armdisarm(status, elementId) {
+    var audioElement = document.createElement('audio');
+    audioElement.setAttribute('src', '../Resources/ALARME.WAV');
+    audioElement.setAttribute('loop', "loop");
+function armdisarm(status, elementId) {
     if (status == 'arm'){
       color = 'green';
       set = false;
@@ -24,10 +27,13 @@ var socket = io.connect(constants.URL);
     socket.on(events.DEVICE_STATUS, function (data) {
     console.log(data);
     console.log(JSON.stringify(data));
+    audioElement.pause();
     for (var i = 0; i < data.length; i++) {
     console.log(i);
     console.log(data[i].id);
-    
+    if(data[i].triggered == '1'){
+    audioElement.play();
+    }
       if(data[i].armState == '1'){
           armdisarm('arm', data[i].id);
         }else{
@@ -46,11 +52,13 @@ var socket = io.connect(constants.URL);
   }
   
   function triggerFireAlarm()
-  { 
+  {
+    audioElement.play();	  
     emitSensorEvent(events.TRIGGER_FIRE_ALARM, '1', {});
   }
   function triggerFloodAlarm()
   {
+    audioElement.play();	  
     emitSensorEvent(events.TRIGGER_WATER_LEVEL, '2', {});
   }
   function triggerCabinetOpened()
@@ -67,6 +75,7 @@ var socket = io.connect(constants.URL);
   }
   function triggerHomeSensor(sensorId)
   {
+    audioElement.play();	  
     emitSensorEvent(events.TRIGGER_SENSOR, sensorId, {});
   }
   function childPositionUpdate(sensorId, latitude, longitude)
@@ -98,5 +107,9 @@ Longitude:<input name="longitude" id="longitude" type="text"/>
 <button id='8' type="button" onclick="childPositionUpdate(document.getElementById('sensorId').value, document.getElementById('latitude').value, document.getElementById('longitude').value)">Update Chile Position</button></li> 
 <li><input name="lowBatterySensor" id="lowBatt" type="text" />
 <input id='low' name="lowBattery" onclick="triggerLowBattery(document.getElementById('lowBatt').value)" type="button" value="Trigger Low Battery" /></li>
+</ul>
+
+
+
 </body>
 </html>

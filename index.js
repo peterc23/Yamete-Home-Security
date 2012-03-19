@@ -3,6 +3,7 @@ var events = require('./Resources/events.js');
 var static = require('node-static');
 var socketio = require('socket.io');
 var handler = require('./requestHandlers.js');
+//var sms = require('./Resources/sms.js');
 
 var sensorfile = new(static.Server)('.');
 var httpServer = http.createServer(function (request, response) {
@@ -41,10 +42,10 @@ io.sockets.on('connection', function (socket) {
   socket.on(events.TRIGGER_FIRE_ALARM, function (data) {
   console.log(data);
   console.log("jeff triggered the Fire alarm");
+  //sms.sendSMS();
   if (data == null || typeof data == 'undefined'){
     return;
   }
-  data.deviceTypeId = 1;
   handler.sensorTriggered(data); 
    
   });
@@ -52,26 +53,32 @@ io.sockets.on('connection', function (socket) {
   socket.on(events.TRIGGER_WATER_LEVEL, function(data) {
     console.log(data);
   console.log("jeff triggered the water alarm");
+  handler.sensorTriggered(data); 
   });
   socket.on(events.CABINET_OPENED, function(data) {
     console.log(data);
   console.log("jeff triggered the cabinet alarm");
+  handler.sensorTriggered(data); 
   });
   socket.on(events.RESIDENT_FELL, function(data) {
     console.log(data);
   console.log("jeff triggered the fall alarm");
+  handler.sensorTriggered(data); 
   });
   socket.on(events.LOW_BATTERY, function(data) {
     console.log(data);
   console.log("jeff triggered the triggered lowBattery alarm");  
+  handler.sensorTriggered(data); 
   });
   socket.on(events.TRIGGER_SENSOR, function(data) {
     console.log(data);
   console.log("jeff triggered the triggered sensor alarm");
+  handler.sensorTriggered(data); 
   });
   socket.on(events.UPDATE_CHILD_POSITION, function(data) {
     console.log(data);
   console.log("jeff triggered the child position alarm");
+  handler.sensorTriggered(data); 
   });
   socket.on(events.CAM_FEED, function(data){
     socket.broadcast.emit(events.VIDEO_FEED, data);

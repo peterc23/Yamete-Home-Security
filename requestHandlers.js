@@ -1,13 +1,23 @@
 var dbSensors = require('./db/dbSensors.js');
 var dbUsers = require('./db/dbUsers.js');
 var constants = require('./Resources/constants.js');
+var events = require('./Resources/events.js');
+var sms = require('./Resources/sms.js');
 
 function sensor(req, res){
 //do somethi
 }
 
-function sensorTriggered(data){
+function sensorTriggered(data, callback){
 
+console.log(data);
+console.log(data.SensorId);
+dbSensors.sensorTriggered(data.SensorId, function(err){
+});
+dbSensors.retrieveContactInfo(data.SensorId, function(contactInfo){
+console.log(contactInfo);			     
+sms.sendSMS(contactInfo[0].number, contactInfo[0].Description+' has been triggered');
+});
 }
 
 function retrieveSensorStatus(data, callback){
