@@ -76,6 +76,12 @@ io.sockets.on('connection', function (socket) {
   socket.on('video', function(data){
     console.log("hi");
   });
+  socket.on(events.ARM_SYSTEM, function(data) {
+      console.log("ARMING SYSTEM");
+  });
+  socket.on(events.DISARM_SYSTEM, function(data) {
+      console.log("disarm system");
+  });
  
  //START OF GUI 
   var clientGUI = {};
