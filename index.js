@@ -16,17 +16,16 @@ var httpServer = http.createServer(function (request, response) {
 var io = socketio.listen(httpServer);
 io.set('log level', 1);
 io.sockets.on('connection', function (socket) {
-  console.log("new Client connected");
+    console.log("new Client connected");
 
-   socket.on(events.DEVICE_CONNECTED, function (data) {
-  console.log('device connected');
-  console.log(data);
-    handler.retrieveSensorStatus(data, function(Sensors){
-    
-    console.log(Sensors);
-    socket.emit(events.DEVICE_STATUS, Sensors);
+    socket.on(events.DEVICE_CONNECTED, function (data) {
+        console.log('device connected');
+        console.log(data);
+        handler.retrieveSensorStatus(data, function(Sensors){
+            // emit sensor status
+            socket.emit(events.DEVICE_STATUS, Sensors);
+        });
     });
-  });
     /*
   Device Types: 
   1 = fire alarm
@@ -77,11 +76,24 @@ io.sockets.on('connection', function (socket) {
   socket.on(events.CAM_FEED, function(data){
     socket.broadcast.emit(events.VIDEO_FEED, data);
   });
-  socket.on(events.ARM_SYSTEM, function(data) {
-      console.log("ARMING SYSTEM");
+  
+  socket.on(events.GET_ARM_STATUS, function(data, fn) {
+      console.log("Getting ARM status");
+      handler.isSystemArmed(data, function(isArmed) {
+          fn({isArmed:isArmed});
+      });
   });
-  socket.on(events.DISARM_SYSTEM, function(data) {
+  socket.on(events.ARM_SYSTEM, function(data, fn) {
+      console.log("arm system");
+      handler.armSystem(data, function() {
+          fn();
+      });
+  });
+  socket.on(events.DISARM_SYSTEM, function(data, fn) {
       console.log("disarm system");
+      handler.disarmSystem(data, function() {
+          fn();
+      });
   });
  
  //START OF GUI 

@@ -24,31 +24,61 @@
     <script type="text/javascript">
         var socket = io.connect(constants.URL);
         var houseid = 1;
-        var systemArmState;
         
         function initialize()
         {
-            
-        }
-        
-        function onFamilySafetyArmClicked()
-        {
-            socket.emit(events.ARM_SYSTEM, {houseid : houseid, systemid : constants.FAMILY_SAFETY_SYSTEM_ID});
-        }
-        
-        function onFamilySafetyDisarmClicked()
-        {
-            socket.emit(events.DISARM_SYSTEM, {houseid : houseid, systemid : constants.FAMILY_SAFETY_SYSTEM_ID});
+            updateSystemTime(); 
+           
+            socket.emit(events.GET_ARM_STATUS, {houseid : houseid}, function(data) {
+               // update ui
+               var systemArmState = data.armStatus;
+               refreshArmStatusUI(systemArmState == constants.SYSTEM_STATE_ARMED);
+            });
         }
         
         function onHomeSecurityArmClicked()
         {
-            socket.emit(events.ARM_SYSTEM, {houseid : houseid, systemid : constants.HOME_SECURITY_SYSTEM_ID});
+            socket.emit(events.ARM_SYSTEM, {houseid : houseid}, function(data) {
+                // update ui
+                refreshArmStatusUI(true);
+                
+                // show alert
+                alert("Home Security System Armed");
+            });
         }
         
         function onHomeSecurityDisarmClicked()
         {
-            socket.emit(events.DISARM_SYSTEM, {houseid : houseid, systemid : constants.HOME_SECURITY_SYSTEM_ID});
+            socket.emit(events.DISARM_SYSTEM, {houseid : houseid}, function(data) {
+                // update ui
+                refreshArmStatusUI(false);
+                
+                // show alert
+                alert("Home Security System Disarmed");
+            });
+        }
+        
+        function onFamilySafetyArmClicked()
+        {
+            //socket.emit(events.ARM_SYSTEM, {houseid : houseid, systemid : constants.HOME_SECURITY_SYSTEM_ID});
+        }
+        
+        function onFamilySafetyDisarmClicked()
+        {
+            //socket.emit(events.DISARM_SYSTEM, {houseid : houseid, systemid : constants.HOME_SECURITY_SYSTEM_ID});
+        }
+        
+        function refreshArmStatusUI(isArmed)
+        {
+            document.getElementById('header_arm_status').innerHTML = isArmed ? "Armed" : "Disarmed";
+            document.getElementById('btn_fs_arm').disabled = isArmed ? "disabled" : "";
+            document.getElementById('btn_fs_disarm').disabled = isArmed ? "" : "disabled";
+        }
+        
+        function updateSystemTime()
+        {
+            var now = new Date();
+            document.getElementById('system_time').innerHTML = now;
         }
     </script>
 </head>
@@ -61,7 +91,7 @@
         <div class="container">
             <a class="brand" href="#">Yamete Thief</a>
             <div class="nav-collapse">
-                <p class="navbar-text pull-right">Arm state: <a href="#">armed</a> &nbsp;&nbsp; System time: <a href="#">10:00 pm</a></p>
+                <p class="navbar-text pull-right">Arm state: <a id="header_arm_status" href="#">-------</a> &nbsp;&nbsp; System time: <a id="system_time" href="#">-----</a></p>
             </div><!--/.nav-collapse -->
         </div>
     </div>
@@ -93,9 +123,9 @@
                         </a>
                     </div>
                     <div class="span3">
-                        <p><h3>Family Safety System</h3><br/>
-                        <button class="btn btn-primary" onclick="onFamilySafetyArmClicked()">Arm</button>&nbsp;
-                        <button class="btn btn-inverse" onclick="onFamilySafetyDisarmClicked()">Disarm</button></p>
+                        <p><h3>Home Security System</h3><br/>
+                        <button id="btn_fs_arm" class="btn btn-primary" onclick="onHomeSecurityArmClicked()">Arm</button>&nbsp;
+                        <button id="btn_fs_disarm" class="btn btn-inverse" onclick="onHomeSecurityDisarmClicked()">Disarm</button></p>
                     </div>
                 </div>
             </div>
@@ -109,9 +139,9 @@
                         </a>
                     </div>
                     <div class="span3">
-                        <p><h3>Home Security System</h3><br/>
-                        <button class="btn btn-primary" onclick="onHomeSecurityArmClicked()">Arm</button>&nbsp;
-                        <button class="btn btn-inverse" onclick="onHomeSecurityDisarmClicked()">Disarm</button></p>
+                        <p><h3>Family Safety System</h3><br/>
+                        <button class="btn btn-primary" onclick="onFamilySafetyArmClicked()">Arm</button>&nbsp;
+                        <button class="btn btn-inverse" onclick="onFamilySafetyDisarmClicked()">Disarm</button></p>
                     </div>
                 </div>
             </div>

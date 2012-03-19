@@ -45,7 +45,7 @@ function executeUpdateSingleQuery(statement, parameters, callback)
             console.log('update successful');
             console.log(info);
             //client.end();
-            if (callback) callback();
+            if (callback) callback(err);
         }
     );
 }

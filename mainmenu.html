@@ -16,70 +16,58 @@
       }
     </style>
     <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <script>
-      if (location.search){
-      var searchString = location.search;
-      console.log(searchString);
-      console.log(getQueryVariable(searchString));
-      }     
-      function getQueryVariable(variable) {
-        var query = window.location.search.substring(1);
-        var vars = query.split("&");
-        for (var i = 0; i < vars.length; i++) {
-          var pair = vars[i].split("=");
-          if (pair[0] == variable) {
-          return unescape(pair[1]);
-          }
-        }
-         alert('Query Variable ' + variable + ' not found');
-        }
-  
-      function getStatus(){
-        socket.emit(events.DEVICE_CONNECTED, { houseId: '1' });
-	};
-       
-    socket.on(events.DEVICE_STATUS, function (data) {
-    console.log(data);
-    console.log(JSON.stringify(data));
-    for (var i = 0; i < data.length; i++) {
-    console.log(i);
-    console.log(data[i].id);
     
-      if(data[i].armState == '1'){
-          armdisarm('arm', data[i].id);
-        }else{
-          armdisarm('disarm', data[i].id);
+    <script type="text/javascript" src="../socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="../Resources/events.js"></script>
+    <script type="text/javascript" src="../Resources/constants.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect(constants.URL);
+        var houseid = 1;
+        
+        function initialize()
+        {
+            updateSystemTime(); 
+           
+            socket.emit(events.GET_ARM_STATUS, {houseid : houseid}, function(data) {
+               // update ui
+               var systemArmState = data.armStatus;
+               refreshArmStatusUI(systemArmState == constants.SYSTEM_STATE_ARMED);
+            });
         }
-    }
-  });
- 
-
-</script>
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+        
+        function refreshArmStatusUI(isArmed)
+        {
+            document.getElementById('header_arm_status').innerHTML = isArmed ? "Armed" : "Disarmed";
+            document.getElementById('ps_active_status').innerHTML = isArmed ? "Active" : "Inactive";
+        }
+        
+        function updateSystemTime()
+        {
+            var now = new Date();
+            document.getElementById('system_time').innerHTML = now;
+        }
+    </script>
   </head>
 
-  <body>
+<body onLoad="initialize()">
 
     <!-- navigation bar -->
     <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="#">Yamete Thief</a>
-          <div class="nav-collapse">
-            <p class="navbar-text pull-right">Arm state: <a href="#">armed</a> &nbsp;&nbsp; System time: <a href="#">10:00 pm</a></p>
-          </div><!--/.nav-collapse -->
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="#">Yamete Thief</a>
+                <div class="nav-collapse">
+                    <p class="navbar-text pull-right">Arm state: <a id="header_arm_status" href="#">-------</a> &nbsp;&nbsp; System time: <a id="system_time" href="#">-----</a></p>
+                </div><!--/.nav-collapse -->
+            </div>
         </div>
-      </div>
     </div>
 
     <div class="container">
 
       <div class="hero-unit">
         <h1>Main Menu</h1>
-        <p>Physical Security: <a href="#">active</a> <br/>Family Safety: <a href="#">active</a></p>
+        <p>Physical Security: <a id="ps_active_status" href="#">active</a> <br/>Family Safety: <a id="fs_active_status" href="#">Inactive</a></p>
       </div>
 
       <!-- Example row of columns -->
@@ -114,3 +102,6 @@
       </footer>
 
     </div> <!-- /container -->
+    
+</body>
+</html>

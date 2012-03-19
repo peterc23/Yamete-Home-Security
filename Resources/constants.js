@@ -6,7 +6,7 @@
     exports.HOME_SECURITY_SYSTEM_ID = 0;
     exports.FAMILY_SAFETY_SYSTEM_ID = 1;
     
-    exports.SYSTEM_STATE_ARMED = "armed";
-    exports.SYSTEM_STATE_DISARMED = "disarmed";
+    exports.SYSTEM_STATE_ARMED = 1;
+    exports.SYSTEM_STATE_DISARMED = 0;
    
 })(typeof exports === 'undefined'? this['constants']={}: exports);
