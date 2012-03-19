@@ -34,7 +34,7 @@
 
 function send(msg){
 //	  document.write("got here");
-          socket.emit('video', msg);
+          socket.emit(events.CAM_FEED, msg);
         }    
 
     cw = 120;//240;//video.clientWidth;

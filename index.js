@@ -14,6 +14,7 @@ var httpServer = http.createServer(function (request, response) {
 }).listen(1234);
 
 var io = socketio.listen(httpServer);
+io.set('log level', 1);
 io.sockets.on('connection', function (socket) {
   console.log("new Client connected");
 
@@ -73,8 +74,8 @@ io.sockets.on('connection', function (socket) {
     console.log(data);
   console.log("jeff triggered the child position alarm");
   });
-  socket.on('video', function(data){
-    console.log("hi");
+  socket.on(events.CAM_FEED, function(data){
+    socket.broadcast.emit(events.VIDEO_FEED, data);
   });
   socket.on(events.ARM_SYSTEM, function(data) {
       console.log("ARMING SYSTEM");
