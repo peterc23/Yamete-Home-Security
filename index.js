@@ -157,4 +157,18 @@ io.sockets.on('connection', function (socket) {
 		fn();
     }); 
   });
+  socket.on(events.REPORT_EMERGENCY, function(data, fn){
+	handler.reportEmergency(data, function(){
+		fn();
+	});
+
+  });
+  socket.on(events.OVERRIDE, function(data, fn){
+	handler.overrideSensor(data, function(){
+
+	houseStatus('1');
+	fn();
+	});
+
+  });
 });

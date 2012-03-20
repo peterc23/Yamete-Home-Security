@@ -15,7 +15,8 @@
    exports.LOW_BATTERY = 'LowBattery';
    exports.DEVICE_CONNECTED = 'deviceConnected';
    exports.DEVICE_STATUS = 'deviceStatus';
-   
+   exports.REPORT_EMERGENCY = 'reportEmergency';
+   exports.OVERRIDE = 'overrideSensor';
    //****Sensor Types
    exports.TRIGGER_SENSOR = 'TriggerSensor';
    exports.SENSOR_TYPE = 'SensorType';

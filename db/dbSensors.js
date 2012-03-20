@@ -12,8 +12,15 @@ function checkState(data, callback){
 function armSystem(houseid, armstate, callback){
     if (houseid == null || typeof houseid == 'undefined' || armstate == null || typeof armstate == 'undefined'){ callback(null); return; }
     
-    client.executeUpdateSingleQuery('UPDATE Household SET armstate=? WHERE householdId=?', [armstate, houseid], function(err){
-        callback(err);
+    client.executeUpdateSingleQuery('UPDATE Household SET armstate=? WHERE householdId=?', [armstate, houseid], function(errr){
+        callback(errr);
+    });
+}
+function overrideSensor(sensorid, callback){
+    if (sensorid == null || typeof sensorid == 'undefined'){callback(null); return; }
+
+    client.executeUpdateSingleQuery('Update '+properties.householdTable+' SET triggered=? WHERE id=?', ['0', sensorid], function(err){
+	callback(err);
     });
 }
 
@@ -64,4 +71,5 @@ exports.getHouseholdSensors = getHouseholdSensors;
 exports.checkState = checkState;
 exports.armSystem = armSystem;
 exports.retrieveContactInfo = retrieveContactInfo;
+exports.overrideSensor = overrideSensor;
 exports.sensorTriggered = sensorTriggered;

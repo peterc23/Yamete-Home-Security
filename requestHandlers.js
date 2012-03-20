@@ -92,6 +92,12 @@ function isSystemArmed(data, callback) {
     });
 }
 
+function reportEmergency(data, callback){
+  sms.sendSMS('2269722284', data.msg);
+  callback();
+
+}
+
 function addNotificationDevice(data, callback){
   var devicenumber = data.number;
   var houseid = data.houseid;
@@ -102,6 +108,16 @@ function addNotificationDevice(data, callback){
   });
 }
 
+function overrideSensor(data, callback){
+var sensorid = data.sensorid;
+
+dbSensors.overrideSensor(sensorid, function(err){
+if(!err)callback();
+});
+
+
+}
+
 exports.isSystemArmed = isSystemArmed;
 exports.armSystem = armSystem;
 exports.disarmSystem = disarmSystem;
@@ -109,4 +125,6 @@ exports.loginRequest = loginRequest;
 exports.retrieveSensorStatus = retrieveSensorStatus;
 exports.sensorTriggered = sensorTriggered;
 exports.addNotificationDevice = addNotificationDevice;
+exports.reportEmergency = reportEmergency;
+exports.overrideSensor = overrideSensor;
 exports.sensor = sensor;

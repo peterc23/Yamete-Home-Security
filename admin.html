@@ -31,7 +31,41 @@
 			socket.emit(events.ADD_NOTIFICATION_DEVICE, {owner: '1', houseid: '1', number: number}, function(){
 			alert("done");	
 			});
+		
 		}
+		function reportEmergency(){
+		var info = prompt("Please Enter The message you wish to report");
+		if (info == null || info == ""){
+		   alert("please send a msg");
+		   return false;
+	        }
+		socket.emit(events.REPORT_EMERGENCY, {msg: info}, function(){
+		  alert("report success!");
+		});
+		}
+
+		function about(){
+
+		alert("Yamete Security System is developed by Peter Chan, Jeffrey Chen and David Gao for the ECE 355 project at the University of Waterloo");
+		}
+
+		function disableQuery(){
+		  var id = prompt("please enter the sensor id (number)");
+		  if(id == null || id ==""){
+			alert("please enter a number");
+			return false;
+		}
+		disableAlarm(id);
+
+		}
+
+		function disableAlarm(id){
+
+			socket.emit(events.OVERRIDE, {sensorid: id}, function(){
+			  alert("sensor override success!");
+			});
+		}
+
 		
 
     </script>
@@ -83,24 +117,20 @@
                         <td><p>add a new phone/device to recieve system updates via SMS</p></td>
                     </tr>
                     <tr>
-                        <td><button class="btn btn-primary">Report Emergency</button></td>
+                        <td><button onclick="reportEmergency()" class="btn btn-primary">Report Emergency</button></td>
                         <td><p>report an Emergency, all emergencies are temporarily routed to Yamete Theif Chief Security Officer </p></td>
                     </tr>
                     <tr>
-                        <td><button class="btn btn-primary">About</button></td>
+                        <td><button onclick="about()" class="btn btn-primary">About</button></td>
                         <td><p>About Yamete Security System</p></td>
                     </tr>
                     <tr>
-                        <td><button class="btn btn-primary">Cancel Alarm</button></td>
+                        <td><button onclick="disableQuery()" class="btn btn-primary">Cancel Alarm</button></td>
                         <td><p>Cancel a Particular Alarm Number</p></td>
                     </tr>
                     <tr>
-                        <td><button class="btn btn-primary">Override Firm Alarm</button></td>
+                        <td><button onclick="disableAlarm('1')" class="btn btn-primary">Override Firm Alarm</button></td>
                         <td><p>Override Fire Alarm, must disable all tirgered sensors to disable alarm sound</p></td>
-                    </tr>
-                    <tr>
-                        <td><button class="btn btn-primary">Override Safety Sensors</button></td>
-                        <td><p>Override Safety Sensors, must disable all triggered sensors to disable alarm sound</p></td>
                     </tr>
                 </tbody>
             </table>
