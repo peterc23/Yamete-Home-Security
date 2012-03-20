@@ -1,3 +1,8 @@
+/*
+<!-- ************HEADER***************
+ECE 355 Security system, Group 23 khp2chan, jj3chen,jtgao
+This is the request handler of the secruity panel.All calls are routed here form the main index.js, from here we dleegate the action to other clases such as db helpers and sms helpers.we analyze and return data to the repsective end points here.-->
+*/
 var dbSensors = require('./db/dbSensors.js');
 var dbUsers = require('./db/dbUsers.js');
 var dbDevices = require('./db/dbDevices.js');

@@ -1,3 +1,8 @@
+/*
+<!-- ************HEADER***************
+ECE 355 Security system, Group 23 khp2chan, jj3chen,jtgao
+This is the SMS helper file we use SMSIFIED to send SMS messages. and we interact with SMSIFIED by doing HTTP POSTS requests to the SMSIFIED server.-->
+*/
 var http = require('http');
 var sys = require('sys');
 var constants = require('./constants.js');

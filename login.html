@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!-- ************HEADER***************
+ECE 355 Security system, Group 23 khp2chan, jj3chen,jtgao
+This is the login of the secruity panel. We use the twitter bootstrap to help with css layouts. We update get the user credentials, convert it to MD5 hash then send to the server for processing, server will compare the md5 hash to the one in the DB for specific USer then return with house information and success/ fail which will determine the next action..-->
 <!-- saved from url=(0054)http://twitter.github.com/bootstrap/examples/hero.html -->
 <html lang="en"><head>
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +36,9 @@
 	      var socket = io.connect(constants.URL);
 	        socket.on(events.USER_CREDENTIALS , function (data) {
 		  console.log(data);
-		  var url = 'http://'+constants.URL+'/mainmenu.html?username='+data.username+'&houseId='+data.householdId;
-	  	  location.href = url;	  
+		  var url = constants.URL+'/mainmenu.html?username='+data.username+'&houseId='+data.householdId;
+		  alert(url);
+		  location.href = url;	  
 		});
 		
 

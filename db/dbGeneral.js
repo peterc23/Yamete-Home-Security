@@ -1,3 +1,9 @@
+/*
+<!-- ************HEADER***************
+ECE 355 Security system, Group 23 khp2chan, jj3chen,jtgao
+This is the General Database Helper files, we use the node.js mysql module to interact with the mysql dtabase, we execute normal sql statements to interact with them.
+These functions are called from the specific table helper files e.g. dbUsers, dbSensors and dbDevices).-->
+*/
 var mysql = require('mysql');
 var properties = require('../Resources/properties.js');
 

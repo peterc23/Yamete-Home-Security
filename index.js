@@ -1,3 +1,8 @@
+/*
+<!-- ************HEADER***************
+ECE 355 Security system, Group 23 khp2chan, jj3chen,jtgao
+This is the MAIN FILE FOR OUR server! The whole node.js server is run off this index.js file, this file first creates teh server and listens to requests on port 1234. We use the static node module to serve up the whole directory to make different pages available for different clients. We then listen on different socket events and perform functions based on them. All events are routed to the requesthandler.js file where the requests are futher delegated and dealt with. we use socket.on to lisetn to events, socket.emit to reply to events and socket.boradcast to broadcast to all listeners.-->
+*/
 var http = require('http');
 var events = require('./Resources/events.js');
 var static = require('node-static');

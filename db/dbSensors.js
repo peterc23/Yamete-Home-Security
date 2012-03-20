@@ -1,3 +1,9 @@
+/*
+<!-- ************HEADER***************
+ECE 355 Security system, Group 23 khp2chan, jj3chen,jtgao
+This is the db Sensors portion of the db actions. this file interacts with the sensors table.-->
+*/
+
 var client = require('./dbGeneral.js');
 var properties = require('../Resources/properties.js');
 var factory = require('./factory.js');

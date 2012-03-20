@@ -1,3 +1,8 @@
+/*
+<!-- ************HEADER***************
+ECE 355 Security system, Group 23 khp2chan, jj3chen,jtgao
+This is the dbUsers file. used to interact with the users table.-->
+*/
 var client = require('./dbGeneral.js');
 var properties = require('../Resources/properties.js');
 var factory = require('./factory.js');
