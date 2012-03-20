@@ -47,14 +47,16 @@ function createSensorFromResult(result)
 
     return factory.createSensorItem(result.id, result.armState, result.settingId, result.automationId, result.contactId, result.deviceTypeId, result.deviceType, result.Description, result.householdId);
 }
+function createDeviceResult(result){
+  return factory.createDeviceItem(result.deviceTypeId, result.Description, result.number);
+}
 
 function retrieveContactInfo(sensorid, callback){
   if (sensorid == null || typeof sensorid == 'undefined') {callback(null); return; }
 
-  client.executeFindSingleQuery('SELECT * FROM '+properties.householdTable+' JOIN '+properties.notifyDevices+' ON '+properties.householdTable+'.contactId = '+properties.notifyDevices+'.id WHERE '+properties.householdTable+'.id=?', [sensorid], createSensorFromResult, function(contactInfo){
-    console.log("****************************************");
-    console.log(contactInfo);
-    callback(contactInfo);
+  client.executeFindMultipleQuery('SELECT * FROM '+properties.householdTable+' JOIN '+properties.notifyDevices+' ON '+properties.householdTable+'.householdId = '+properties.notifyDevices+'.houseid WHERE '+properties.householdTable+'.id=?', [sensorid], createDeviceResult, function(contactInfo){
+console.log("hihihihihihihihi");
+       	  callback(contactInfo);
   });
 }
 

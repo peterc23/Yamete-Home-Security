@@ -2,7 +2,7 @@
 <!-- saved from url=(0054)http://twitter.github.com/bootstrap/examples/hero.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>Yamete Security System Configure</title>
+    <title>Yamete Security System Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -16,6 +16,26 @@
         }
     </style>
     <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <script src="../socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="../Resources/events.js"></script>
+    <script type="text/javascript" src="../Resources/constants.js"></script>
+    <script>
+	      var socket = io.connect(constants.URL);
+	       		
+		function addDevice(){
+			var number = prompt("Please enter your phone number with no dashes","")
+			if (number == null || number ==""){
+				alert("please fill your number");
+				return false;
+			}
+			socket.emit(events.ADD_NOTIFICATION_DEVICE, {owner: '1', houseid: '1', number: number}, function(){
+			alert("done");	
+			});
+		}
+		
+
+    </script>
+ 
 </head>
 
 <body>
@@ -57,37 +77,30 @@
                     </tr>
                 </thead>
                 <tbody>
+
                     <tr>
-                        <td><button class="btn btn-primary">View Logs</button></td>
-                        <td><p>asdasdasdasdasdasdasdadsasdadjoisdjfoijsdoifjskmaksndasdddd</p></td>
-                    </tr>
-                    <tr>
-                        <td><button class="btn btn-primary">Add Notification Device</button></td>
-                        <td><p>asdasdasdasdasdasdasdadsasdadjoisdjfoijsdoifjskmaksndasdddd</p></td>
+                        <td><button onclick="addDevice()" class="btn btn-primary">Add Notification Device</button></td>
+                        <td><p>add a new phone/device to recieve system updates via SMS</p></td>
                     </tr>
                     <tr>
                         <td><button class="btn btn-primary">Report Emergency</button></td>
-                        <td><p>asdasdasdasdasdasdasdadsasdadjoisdjfoijsdoifjskmaksndasdddd</p></td>
+                        <td><p>report an Emergency, all emergencies are temporarily routed to Yamete Theif Chief Security Officer </p></td>
                     </tr>
                     <tr>
                         <td><button class="btn btn-primary">About</button></td>
-                        <td><p>asdasdasdasdasdasdasdadsasdadjoisdjfoijsdoifjskmaksndasdddd</p></td>
+                        <td><p>About Yamete Security System</p></td>
                     </tr>
                     <tr>
                         <td><button class="btn btn-primary">Cancel Alarm</button></td>
-                        <td><p>asdasdasdasdasdasdasdadsasdadjoisdjfoijsdoifjskmaksndasdddd</p></td>
-                    </tr>
-                    <tr>
-                        <td><button class="btn btn-primary">Disable for 30 mins</button></td>
-                        <td><p>asdasdasdasdasdasdasdadsasdadjoisdjfoijsdoifjskmaksndasdddd</p></td>
+                        <td><p>Cancel a Particular Alarm Number</p></td>
                     </tr>
                     <tr>
                         <td><button class="btn btn-primary">Override Firm Alarm</button></td>
-                        <td><p>asdasdasdasdasdasdasdadsasdadjoisdjfoijsdoifjskmaksndasdddd</p></td>
+                        <td><p>Override Fire Alarm, must disable all tirgered sensors to disable alarm sound</p></td>
                     </tr>
                     <tr>
                         <td><button class="btn btn-primary">Override Safety Sensors</button></td>
-                        <td><p>asdasdasdasdasdasdasdadsasdadjoisdjfoijsdoifjskmaksndasdddd</p></td>
+                        <td><p>Override Safety Sensors, must disable all triggered sensors to disable alarm sound</p></td>
                     </tr>
                 </tbody>
             </table>

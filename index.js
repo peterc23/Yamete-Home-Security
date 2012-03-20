@@ -133,7 +133,6 @@ io.sockets.on('connection', function (socket) {
       handler.disarmSystem(data, function() {
           fn();
 
-    console.log("bababababababa " + houseid);  
      houseStatus(houseid);			 
     });
   });
@@ -150,5 +149,12 @@ io.sockets.on('connection', function (socket) {
 		      
   });
    });
-
+  socket.on(events.ADD_NOTIFICATION_DEVICE, function(data, fn){
+	console.log("HI THERE" + data);
+	console.log(data);
+	handler.addNotificationDevice(data, function(response){
+	console.log(response);
+		fn();
+    }); 
+  });
 });

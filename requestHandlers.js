@@ -1,5 +1,6 @@
 var dbSensors = require('./db/dbSensors.js');
 var dbUsers = require('./db/dbUsers.js');
+var dbDevices = require('./db/dbDevices.js');
 var constants = require('./Resources/constants.js');
 var events = require('./Resources/events.js');
 var sms = require('./Resources/sms.js');
@@ -17,7 +18,9 @@ dbSensors.sensorTriggered(data.SensorId, function(err){
 dbSensors.retrieveContactInfo(data.SensorId, function(contactInfo){
 console.log(contactInfo);	
 if (contactInfo || typeof contactInfo !== 'undefined'){
-sms.sendSMS(contactInfo[0].number, contactInfo[0].Description+' has been triggered');
+for(var i=0; i<contactInfo.length; i++){
+	sms.sendSMS(contactInfo[i].number, contactInfo[i].Description+' has been triggered, Sensor Id:'+contactInfo[i].id);
+}
 }
 callback(contactInfo);
 
@@ -74,7 +77,7 @@ function disarmSystem(data, callback) {
 
 function isSystemArmed(data, callback) {
     var houseid = data.houseid;
-    
+
     dbSensors.getHouseholdSensors(houseid, function(sensors) {
         var i = 0;
         for (i=0;i<sensors.length;i++)
@@ -89,10 +92,21 @@ function isSystemArmed(data, callback) {
     });
 }
 
+function addNotificationDevice(data, callback){
+  var devicenumber = data.number;
+  var houseid = data.houseid;
+  var owner = data.owner;
+	 dbDevices.addNotificationDevice(owner, devicenumber, houseid, function(info){
+	console.log(info);
+		 callback(info);
+  });
+}
+
 exports.isSystemArmed = isSystemArmed;
 exports.armSystem = armSystem;
 exports.disarmSystem = disarmSystem;
 exports.loginRequest = loginRequest;
 exports.retrieveSensorStatus = retrieveSensorStatus;
 exports.sensorTriggered = sensorTriggered;
+exports.addNotificationDevice = addNotificationDevice;
 exports.sensor = sensor;
