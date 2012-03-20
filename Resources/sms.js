@@ -5,6 +5,8 @@ var smsified = require('smsified');
 
 
 function sendSMS(destNum, msg){
+if (typeof destNum === "undefined" || typeof msg === 'undefined')
+	return;
 var sms = new SMSified(constants.smsified.username, constants.smsified.password);
 var options = {senderAddress: constants.smsified.senderAddress, address: destNum, message: msg};
 console.log(options);

@@ -14,7 +14,10 @@ var httpServer = http.createServer(function (request, response) {
     });
 }).listen(1234);
 
+
 var io = socketio.listen(httpServer);
+
+
 io.set('log level', 1);
 io.sockets.on('connection', function (socket) {
     console.log("new Client connected");
@@ -22,7 +25,7 @@ io.sockets.on('connection', function (socket) {
     socket.on(events.DEVICE_CONNECTED, function (data) {
         console.log('device connected');
         console.log(data);
-        handler.retrieveSensorStatus(data, function(Sensors){
+        handler.retrieveSensorStatus(data.houseId, function(Sensors){
             // emit sensor status
             socket.emit(events.DEVICE_STATUS, Sensors);
         });
@@ -38,7 +41,14 @@ io.sockets.on('connection', function (socket) {
   7 = window
   8 = motion
   */
-  
+  function houseStatus(houseId){
+    handler.retrieveSensorStatus(houseId, function(Sensors){
+       console.log("***************"+ Sensors);
+       socket.broadcast.emit(events.DEVICE_STATUS, Sensors);
+    });
+
+  }
+
   socket.on(events.TRIGGER_FIRE_ALARM, function (data) {
   console.log(data);
   console.log("jeff triggered the Fire alarm");
@@ -46,39 +56,58 @@ io.sockets.on('connection', function (socket) {
   if (data == null || typeof data == 'undefined'){
     return;
   }
-  handler.sensorTriggered(data); 
-   
+  handler.sensorTriggered(data, function(house){
+    houseStatus(house.householdId);
+
+  }); 
   });
 
   socket.on(events.TRIGGER_WATER_LEVEL, function(data) {
     console.log(data);
   console.log("jeff triggered the water alarm");
-  handler.sensorTriggered(data); 
+  handler.sensorTriggered(data, function(house){
+    houseStatus(house.householdId);			 
+  }); 
   });
+
   socket.on(events.CABINET_OPENED, function(data) {
     console.log(data);
   console.log("jeff triggered the cabinet alarm");
-  handler.sensorTriggered(data); 
+  handler.sensorTriggered(data, function(house){
+  houseStatus(house.householdId);
+  }); 
   });
+
   socket.on(events.RESIDENT_FELL, function(data) {
     console.log(data);
-  console.log("jeff triggered the fall alarm");
-  handler.sensorTriggered(data); 
+    console.log("jeff triggered the fall alarm");
+  handler.sensorTriggered(data, function(house){
+    houseStatus(house.householdId);			 
   });
+  });
+
   socket.on(events.LOW_BATTERY, function(data) {
     console.log(data);
   console.log("jeff triggered the triggered lowBattery alarm");  
-  handler.sensorTriggered(data); 
+  handler.sensorTriggered(data, function(house){
+    houseStatus(house.householdId);			 
+  }); 
   });
+
   socket.on(events.TRIGGER_SENSOR, function(data) {
-    console.log(data);
+  	  console.log(data);
   console.log("jeff triggered the triggered sensor alarm");
-  handler.sensorTriggered(data); 
+  handler.sensorTriggered(data, function(house){
+    houseStatus(house.householdId);
+  }); 
   });
+
   socket.on(events.UPDATE_CHILD_POSITION, function(data) {
     console.log(data);
   console.log("jeff triggered the child position alarm");
-  handler.sensorTriggered(data); 
+  handler.sensorTriggered(data, function(house){
+   houseStatus(house.householdId);			 
+  }); 
   });
   socket.on(events.CAM_FEED, function(data){
     socket.broadcast.emit(events.VIDEO_FEED, data);
@@ -92,15 +121,21 @@ io.sockets.on('connection', function (socket) {
   });
   socket.on(events.ARM_SYSTEM, function(data, fn) {
       console.log("arm system");
+     var houseid = data.houseid;
       handler.armSystem(data, function() {
           fn();
-      });
+    houseStatus(houseid);			 
+    });
   });
   socket.on(events.DISARM_SYSTEM, function(data, fn) {
       console.log("disarm system");
+     var houseid = data.houseid;
       handler.disarmSystem(data, function() {
           fn();
-      });
+
+    console.log("bababababababa " + houseid);  
+     houseStatus(houseid);			 
+    });
   });
  
  //START OF GUI 

@@ -15,13 +15,17 @@ console.log(data.SensorId);
 dbSensors.sensorTriggered(data.SensorId, function(err){
 });
 dbSensors.retrieveContactInfo(data.SensorId, function(contactInfo){
-console.log(contactInfo);			     
+console.log(contactInfo);	
+if (contactInfo || typeof contactInfo !== 'undefined'){
 sms.sendSMS(contactInfo[0].number, contactInfo[0].Description+' has been triggered');
+}
+callback(contactInfo);
+
 });
 }
 
 function retrieveSensorStatus(data, callback){
-dbSensors.checkState(data, function(sensorItem){
+dbSensors.getHouseholdSensors(data, function(sensorItem){
 console.log("doneretrieve");
 console.log(sensorItem);
 callback(sensorItem);
