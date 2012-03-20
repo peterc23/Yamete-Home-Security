@@ -2,7 +2,7 @@
     //This page defins shared constants require dfor different modules.
 	//the URL specifies the url which the server is running
     //exports.URL = 'http://192.168.1.8:1234';
-    exports.URL = 'http://localhost:1234';
+    exports.URL = 'http://dev.kaheichan.com:1234';
     
     // arm and disarm
     exports.HOME_SECURITY_SYSTEM_ID = 0;

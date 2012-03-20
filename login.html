@@ -37,7 +37,6 @@ This is the login of the secruity panel. We use the twitter bootstrap to help wi
 	        socket.on(events.USER_CREDENTIALS , function (data) {
 		  console.log(data);
 		  var url = constants.URL+'/mainmenu.html?username='+data.username+'&houseId='+data.householdId;
-		  alert(url);
 		  location.href = url;	  
 		});
 		
