@@ -44,6 +44,11 @@ var socket = io.connect(constants.URL);
  
 
   function emitSensorEvent(event, sensorId, message){
+    if (sensorId == null || sensorId == ""){
+    alert("cannot be blank");
+    return false;
+    }
+
     var date = new Date();
     var messageData = message;
     messageData[events.SENSOR_ID] = sensorId;
