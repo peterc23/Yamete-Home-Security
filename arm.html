@@ -34,8 +34,7 @@ This is the arm/disarm screen of the secruity panel. We use the twitter bootstra
            
             socket.emit(events.GET_ARM_STATUS, {houseid : houseid}, function(data) {
                // update ui
-               var systemArmState = data.armStatus;
-               refreshArmStatusUI(systemArmState == constants.SYSTEM_STATE_ARMED);
+               refreshArmStatusUI(data.isArmed);
             });
         }
         
@@ -122,7 +121,7 @@ This is the arm/disarm screen of the secruity panel. We use the twitter bootstra
                 <div class="row">
                     <div class="span2">
                         <a class="thumbnail" href="#">
-                            <img alt="" src="http://placehold.it/260x180">
+                            <img alt="" src="../Resources/home_secure.jpg">
                         </a>
                     </div>
                     <div class="span3">
@@ -138,7 +137,7 @@ This is the arm/disarm screen of the secruity panel. We use the twitter bootstra
                 <div class="row">
                     <div class="span2">
                         <a class="thumbnail" href="#">
-                            <img alt="" src="http://placehold.it/260x180">
+                            <img alt="" src="../Resources/family.png">
                         </a>
                     </div>
                     <div class="span3">

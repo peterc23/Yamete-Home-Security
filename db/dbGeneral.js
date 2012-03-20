@@ -64,7 +64,7 @@ function executeInsertSingleQuery(statement, parameters, callback)
             console.log('insert successful');
             console.log(info);
             //client.end();
-            if (callback) callback(info);
+            if (callback) callback(err);
         }
     );
 }

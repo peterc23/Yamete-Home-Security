@@ -38,6 +38,14 @@ function getHouseholdSensors(houseid, callback){
     });
 }
 
+function getSensorInfo(sensorid, callback){
+    if (sensorid == null || typeof sensorid == 'undefined') {callback(null); return; }
+    
+    client.executeFindSingleQuery('SELECT * FROM Household WHERE id = ? LIMIT 1', [sensorid], createSensorFromResult, function(houseInfo){
+         callback(houseInfo[0]);
+     });
+}
+
 function sensorTriggered(sensorid, callback){
     if (sensorid == null || typeof sensorid == 'undefined') {callback(null); return; }
     console.log('grr'+sensorid);
@@ -46,6 +54,17 @@ function sensorTriggered(sensorid, callback){
  	    callback(err);
     });
 }
+
+function addSensor(sensor, callback){
+    if (sensor == null || typeof sensor == 'undefined') {callback(null); return;}
+    
+    client.executeInsertSingleQuery('INSERT INTO Household (armState,settingId,automationId,contactId,deviceTypeId,deviceType,Description,householdId,triggered,lowbattery) '+
+    'VALUES (?,?,?,?,?,?,?,?,?,?)', [0,0,0,sensor.contactId,sensor.deviceTypeId,sensor.deviceType,sensor.Description,sensor.householdId,0,0], 
+    function(err){
+        callback(err);
+    });
+}
+
 /*
 function updateTriggerSensor(data, callback){
     if (data == null || typeof data == 'undefined'){ callback(null); return}
@@ -58,7 +77,7 @@ function createSensorFromResult(result)
 {
     if (result == null || typeof result == 'undefined') { callback(null); return; }
 
-    return factory.createSensorItem(result.id, result.armState, result.settingId, result.automationId, result.contactId, result.deviceTypeId, result.deviceType, result.Description, result.householdId);
+    return factory.createSensorItem(result.id, result.armState, result.settingId, result.automationId, result.contactId, result.deviceTypeId, result.deviceType, result.Description, result.householdId, result.triggered, result.lowbattery);
 }
 function createDeviceResult(result){
   return factory.createDeviceItem(result.deviceTypeId, result.Description, result.number);
@@ -73,6 +92,17 @@ console.log("hihihihihihihihi");
   });
 }
 
+function updateLowBatteryStatus(sensorid, lowbattery, callback){
+    if (sensorid == null || typeof sensorid == 'undefined' || lowbattery == null || typeof lowbattery == 'undefined') { callback(null); return; }
+    
+    client.executeUpdateSingleQuery('UPDATE Household SET lowbattery=? WHERE id=?',[lowbattery, sensorid], function(err){
+        callback(err);
+    });
+}
+
+exports.addSensor = addSensor;
+exports.getSensorInfo = getSensorInfo;
+exports.updateLowBatteryStatus = updateLowBatteryStatus;
 exports.getHouseholdSensors = getHouseholdSensors;
 exports.checkState = checkState;
 exports.armSystem = armSystem;

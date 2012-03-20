@@ -19,9 +19,67 @@ This is the Status menu of the secruity panel. We use the twitter bootstrap to h
         }
     </style>
     <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    
+    <script type="text/javascript" src="../socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="../Resources/events.js"></script>
+    <script type="text/javascript" src="../Resources/constants.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect(constants.URL);
+        var houseid = 1;
+        
+        function initialize()
+        {
+            updateSystemTime(); 
+           
+            socket.emit(events.GET_ARM_STATUS, {houseid : houseid}, function(data) {
+                // update ui
+                refreshArmStatusUI(data.isArmed);
+            });
+            
+            socket.emit(events.GET_SENSOR_STATUS, { houseid: houseid }, function(data) {
+                refreshSensorTable(data);
+            });
+        }
+
+        function refreshArmStatusUI(isArmed)
+        {
+            document.getElementById('header_arm_status').innerHTML = isArmed ? "Armed" : "Disarmed";
+        }
+        
+        function updateSystemTime()
+        {
+            var now = new Date();
+            document.getElementById('system_time').innerHTML = now;
+        }
+            
+        function refreshSensorTable(data)
+        {
+            var sensortable = document.getElementById('sensor_table');
+            
+            sensortable.innerHTML = '';
+                      
+            var row;
+            var newrowData;
+            for (row in data)
+            {
+                newrowData = '<tr>';
+                newrowData += '<td>'+data[row].Description+'</td>';
+                newrowData += '<td>'+data[row].armState+'</td>';
+                newrowData += '<td>'+data[row].triggered+'</td>';
+                newrowData += '<td>'+data[row].lowbattery+'</td>';
+                newrowData += '</tr>';
+                sensortable.innerHTML += newrowData;
+            }
+        }
+        
+        socket.on(events.DEVICE_STATUS, function (data) {
+            alert('STATUS CHANGED');
+            refreshSensorTable(data)
+        });
+    </script>
 </head>
 
-<body>
+<body  onLoad="initialize()">
 
 <!-- navigation bar -->
 <div class="navbar navbar-fixed-top">
@@ -29,7 +87,7 @@ This is the Status menu of the secruity panel. We use the twitter bootstrap to h
         <div class="container">
             <a class="brand" href="#">Yamete Thief</a>
             <div class="nav-collapse">
-                <p class="navbar-text pull-right">Arm state: <a href="#">armed</a> &nbsp;&nbsp; System time: <a href="#">10:00 pm</a></p>
+                <p class="navbar-text pull-right">Arm state: <a id="header_arm_status" href="#">-------</a> &nbsp;&nbsp; System time: <a id="system_time" href="#">-----</a></p>
             </div><!--/.nav-collapse -->
         </div>
     </div>
@@ -53,15 +111,38 @@ This is the Status menu of the secruity panel. We use the twitter bootstrap to h
         <div class="span8 offset2">  
             <p><h3>map of the house</h3></p>
             <a class="thumbnail" href="#">
-                <img alt="" src="http://placehold.it/260x180">
+                <img alt="" src="../Resources/floorplan.png">
             </a>
+            <br/>
+            <a class="btn btn-primary" href="camfeed.html">View Security Camera</a>
+        </div>
+    </div>
+    
+    <br/>
+    <br/>
+    <div class="row">
+        <div class="span8 offset2">
+            <h3>Sensor Status</h3><br/>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sensor Name</th>
+                        <th>Armed</th>
+                        <th>Triggered</th>
+                        <th>Low Battery</th>
+                    </tr>
+                </thead>
+                <tbody id="sensor_table">
+                    
+                </tbody>
+            </table>
         </div>
     </div>
     
     <br/>
     <div class="row">
         <div class="span8 offset2">
-            <a class="btn" href="mainmenu.html">&#60; Back</a>
+            <a class="btn" href="mainmenu.html">&#60; Back</a> &nbsp;
         </div>
     </div>
 </div>

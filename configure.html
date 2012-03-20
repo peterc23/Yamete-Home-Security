@@ -19,9 +19,56 @@ This is the configure menu of the secruity panel. We use the twitter bootstrap t
         }
     </style>
     <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    
+    <!-- JAVASCRIPTS -->
+    <script type="text/javascript" src="../socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="../Resources/events.js"></script>
+    <script type="text/javascript" src="../Resources/constants.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect(constants.URL);
+        var houseid = 1;
+        
+        function initialize()
+        {
+            updateSystemTime(); 
+           
+            socket.emit(events.GET_ARM_STATUS, {houseid : houseid}, function(data) {
+               // update ui
+               refreshArmStatusUI(data.isArmed);
+            });
+        }
+        
+        function addSensor()
+        {
+            console.log("asd");
+            var select_e = document.getElementById('select_device');
+            
+            var sensor = {};
+            sensor.contactId = "1";
+            sensor.deviceTypeId = select_e.options[select_e.selectedIndex].value;
+            sensor.deviceType = select_e.options[select_e.selectedIndex].text;
+            sensor.Description = document.getElementById('input_description').value;
+            sensor.householdId = houseid;
+            
+            socket.emit(events.ADD_SENSOR,sensor,function(data){
+                alert("New Sensor Succesfully Added");
+            });
+        }
+        
+        function refreshArmStatusUI(isArmed)
+        {
+            document.getElementById('header_arm_status').innerHTML = isArmed ? "Armed" : "Disarmed";
+        }
+        
+        function updateSystemTime()
+        {
+            var now = new Date();
+            document.getElementById('system_time').innerHTML = now;
+        }
+    </script>
 </head>
 
-<body>
+<body onLoad="initialize()">
 
 <!-- navigation bar -->
 <div class="navbar navbar-fixed-top">
@@ -29,7 +76,7 @@ This is the configure menu of the secruity panel. We use the twitter bootstrap t
         <div class="container">
             <a class="brand" href="#">Yamete Thief</a>
             <div class="nav-collapse">
-                <p class="navbar-text pull-right">Arm state: <a href="#">armed</a> &nbsp;&nbsp; System time: <a href="#">10:00 pm</a></p>
+                <p class="navbar-text pull-right">Arm state: <a id="header_arm_status" href="#">-------</a> &nbsp;&nbsp; System time: <a id="system_time" href="#">-----</a></p>
             </div><!--/.nav-collapse -->
         </div>
     </div>
@@ -57,13 +104,13 @@ This is the configure menu of the secruity panel. We use the twitter bootstrap t
                 <div class="row">
                     <div class="span2">
                         <a class="thumbnail" href="#">
-                            <img alt="" src="http://placehold.it/260x180">
+                            <img alt="" src="../Resources/schedule.jpg">
                         </a>
                     </div>
                     <div class="span3">
                         <p><h3>System Schedule</h3><br/>
-                        <button class="btn btn-primary">New Preset</button>&nbsp;
-                        <button class="btn btn-inverse">Edit</button></p>
+                        <button disabled="disabled" class="btn btn-primary">New Preset</button>&nbsp;
+                        <button disabled="disabled" class="btn btn-inverse">Edit</button></p>
                     </div>
                 </div>
             </div>
@@ -73,13 +120,13 @@ This is the configure menu of the secruity panel. We use the twitter bootstrap t
                 <div class="row">
                     <div class="span2">
                         <a class="thumbnail" href="#">
-                            <img alt="" src="http://placehold.it/260x180">
+                            <img alt="" src="../Resources/configure.png">
                         </a>
                     </div>
                     <div class="span3">
-                        <p><h3>Test/Configure</h3><br/>
-                        <button class="btn btn-primary">Add Sensor</button>&nbsp;
-                        <button class="btn btn-inverse">Test Sensors</button></p>
+                        <p><h3>Test/Configure</h3><br/> 
+                        <a class="btn btn-primary" data-toggle="modal" href="#addsensor_modal">Add Sensor</a>&nbsp;
+                        <button disabled="disabled" class="btn btn-inverse">Test Sensors</button></p>
                     </div>
                 </div>
             </div>
@@ -91,9 +138,44 @@ This is the configure menu of the secruity panel. We use the twitter bootstrap t
             <a class="btn" href="mainmenu.html">&#60; Back</a>
         </div>
     </div>
+    
+    <!-- Modal Popup -->
+    <div class="modal hide fade" style="display:none;" id="addsensor_modal">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Add New Sensor</h3>
+        </div>
+        <div style="height:300px" class="modal-body">
+            <form>
+                <label>Device Type</label>
+                <select id="select_device" class="select">
+                    <option value="1">Fire</option>
+                    <option value="2">Water</option>
+                    <option value="3">ChildPos</option>
+                    <option value="4">Motion</option>
+                    <option value="5">Window</option>
+                    <option value="6">Door</option>
+                    <option value="7">Fall</option>
+                    <option value="8">Cabinet</option>
+                </select>
+                
+                <br/><br/>
+                <label>Description</label>
+                <input id="input_description" class="span3" type="text" placeholder="Add a Description">
+                <p class="help-block">Please give a description for the device, such as, "Fire Alarm"</p>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" data-dismiss="modal" class="btn">Close</a>
+            <button data-dismiss="modal" onclick="addSensor()" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
 </div>
 
-<script src="login_controller.js"></script>
+<script src="./twitter_javascripts/jquery.js"></script>
+<script src="./twitter_javascripts/bootstrap-transition.js"></script>
+<script src="./twitter_javascripts/bootstrap-modal.js"></script>
+<script src="./twitter_javascripts/bootstrap-dropdown.js"></script>
 
 </body>
 </html>

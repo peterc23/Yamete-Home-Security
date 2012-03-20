@@ -24,7 +24,18 @@ This is the admin menu of the secruity panel. We use the twitter bootstrap to he
     <script type="text/javascript" src="../Resources/constants.js"></script>
     <script>
 	      var socket = io.connect(constants.URL);
-	       		
+	      var houseid = 1;
+                      
+        function initialize()
+        {
+            updateSystemTime(); 
+           
+            socket.emit(events.GET_ARM_STATUS, {houseid : houseid}, function(data) {
+               // update ui
+               refreshArmStatusUI(data.isArmed);
+            });
+        }
+        
 		function addDevice(){
 			var number = prompt("Please enter your phone number with no dashes","")
 			if (number == null || number ==""){
@@ -69,13 +80,22 @@ This is the admin menu of the secruity panel. We use the twitter bootstrap to he
 			});
 		}
 
-		
+        function refreshArmStatusUI(isArmed)
+        {
+            document.getElementById('header_arm_status').innerHTML = isArmed ? "Armed" : "Disarmed";
+        }
+        
+        function updateSystemTime()
+        {
+            var now = new Date();
+            document.getElementById('system_time').innerHTML = now;
+        }
 
     </script>
  
 </head>
 
-<body>
+<body onLoad="initialize()">
 
 <!-- navigation bar -->
 <div class="navbar navbar-fixed-top">
@@ -83,7 +103,7 @@ This is the admin menu of the secruity panel. We use the twitter bootstrap to he
         <div class="container">
             <a class="brand" href="#">Yamete Thief</a>
             <div class="nav-collapse">
-                <p class="navbar-text pull-right">Arm state: <a href="#">armed</a> &nbsp;&nbsp; System time: <a href="#">10:00 pm</a></p>
+                <p class="navbar-text pull-right">Arm state: <a id="header_arm_status" href="#">-------</a> &nbsp;&nbsp; System time: <a id="system_time" href="#">-----</a></p>
             </div><!--/.nav-collapse -->
         </div>
     </div>

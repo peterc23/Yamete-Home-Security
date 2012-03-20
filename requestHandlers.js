@@ -27,7 +27,10 @@ for(var i=0; i<contactInfo.length; i++){
 	sms.sendSMS(contactInfo[i].number, contactInfo[i].Description+' has been triggered, Sensor Id:'+contactInfo[i].id);
 }
 }
-callback(contactInfo);
+
+dbSensors.getSensorInfo(data.SensorId, function(sensorInfo){
+    callback(sensorInfo, contactInfo);
+});
 
 });
 }
@@ -123,6 +126,19 @@ if(!err)callback();
 
 }
 
+function updateLowBatteryStatus(sensorid, lowbattery){
+    dbSensors.updateLowBatteryStatus(sensorid, lowbattery, function(err){
+    });
+}
+
+function addSensor(data, callback){
+    dbSensors.addSensor(data,function(err){
+        callback();
+    });
+}
+
+exports.addSensor = addSensor;
+exports.updateLowBatteryStatus = updateLowBatteryStatus;
 exports.isSystemArmed = isSystemArmed;
 exports.armSystem = armSystem;
 exports.disarmSystem = disarmSystem;

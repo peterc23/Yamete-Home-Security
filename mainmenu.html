@@ -33,8 +33,7 @@ This is the main menu of the secruity panel. We use the twitter bootstrap to hel
            
             socket.emit(events.GET_ARM_STATUS, {houseid : houseid}, function(data) {
                // update ui
-               var systemArmState = data.armStatus;
-               refreshArmStatusUI(systemArmState == constants.SYSTEM_STATE_ARMED);
+                refreshArmStatusUI(data.isArmed);
             });
         }
         

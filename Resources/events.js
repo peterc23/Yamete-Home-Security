@@ -17,6 +17,9 @@
    exports.DEVICE_STATUS = 'deviceStatus';
    exports.REPORT_EMERGENCY = 'reportEmergency';
    exports.OVERRIDE = 'overrideSensor';
+   exports.GET_SENSOR_STATUS = 'getSensorStatus';
+   exports.ADD_SENSOR = 'addSensor';
+   
    //****Sensor Types
    exports.TRIGGER_SENSOR = 'TriggerSensor';
    exports.SENSOR_TYPE = 'SensorType';

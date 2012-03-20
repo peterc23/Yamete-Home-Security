@@ -80,7 +80,11 @@ var socket = io.connect(constants.URL);
   }
   function triggerLowBattery(sensorId)
   {
-    emitSensorEvent(events.LOW_BATTERY, sensorId, {});
+    emitSensorEvent(events.LOW_BATTERY, sensorId, {lowbattery : 1});
+  }
+  function clearLowBattery(sensorId)
+  {
+    emitSensorEvent(events.LOW_BATTERY, sensorId, {lowbattery : 0});
   }
   function triggerHomeSensor(sensorId)
   {
@@ -115,7 +119,8 @@ Latitude:<input name="latitude" id="latitude" type="text"/>
 Longitude:<input name="longitude" id="longitude" type="text"/>
 <button id='8' type="button" onclick="childPositionUpdate(document.getElementById('sensorId').value, document.getElementById('latitude').value, document.getElementById('longitude').value)">Update Chile Position</button></li> 
 <li><input name="lowBatterySensor" id="lowBatt" type="text" />
-<input id='low' name="lowBattery" onclick="triggerLowBattery(document.getElementById('lowBatt').value)" type="button" value="Trigger Low Battery" /></li>
+<input id='low' name="lowBattery" onclick="triggerLowBattery(document.getElementById('lowBatt').value)" type="button" value="Trigger Low Battery" />
+<input id='low' name="lowBattery" onclick="clearLowBattery(document.getElementById('lowBatt').value)" type="button" value="Clear Low Battery" /></li>
 </ul>
 
 
